@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+
+namespace Develop03
+{
+    public class Scripture
+    {
+        public ScriptureReference Reference { get; private set; }
+        private List<Word> words;
+
+        public Scripture(ScriptureReference reference, string text)
+        {
+            Reference = reference;
+            words = new List<Word>();
+            foreach (var word in text.Split(' '))
+            {
+                words.Add(new Word(word));
+            }
+        }
+
+        public void Display()
+        {
+            Console.WriteLine(Reference.ToString());
+            foreach (var word in words)
+            {
+                Console.Write(word + " ");
+            }
+            Console.WriteLine("\n");
+        }
+
+        public void HideRandomWords(int count = 3)
+        {
+            Random rand = new Random();
+            int hiddenCount = 0;
+
+            while (hiddenCount < count && !AllWordsHidden())
+            {
+                int index = rand.Next(words.Count);
+                if (!words[index].Hidden)
+                {
+                    words[index].Hide();
+                    hiddenCount++;
+                }
+            }
+        }
+
+        public bool AllWordsHidden()
+        {
+            foreach (var word in words)
+            {
+                if (!word.Hidden)
+                    return false;
+            }
+            return true;
+        }
+    }
+}
